@@ -9,3 +9,5 @@ Assuming you already have python/pip installed
 Start local server with
 
 `py app.py`
+
+and open `http://127.0.0.1:5000/`
