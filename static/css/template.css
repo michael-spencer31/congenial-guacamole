@@ -1,5 +1,5 @@
 .nav-button {
-    background-color: #037c64;
+    background-color: #021D47;
     border: none;
     color: white;
     padding: 10px 15px;
@@ -10,7 +10,7 @@
 }
 
 .nav-button:hover {
-    background-color: #037c64;
+    background-color: #021D47;
 }
 
 .navbar-brand {
@@ -30,7 +30,7 @@
 }
 
 .btn-primary {
-    background-color: #037c64 !important;
+    background-color: #021D47 !important;
 }
 
 body {
@@ -47,7 +47,7 @@ table {
 }
 
 table thead tr {
-    background-color: #037c64;
+    background-color: #021D47;
     color: #fff;
     text-align: left;
 }
@@ -65,10 +65,10 @@ table tbody tr:nth-of-type(even) {
 }
 
 table tbody tr:first-of-type {
-    border-bottom: 2px solid #037c64;
+    border-bottom: 2px solid #021D47;
 }
 table tbody tr:last-of-type {
-    border-bottom: 2px solid #037c64;
+    border-bottom: 2px solid #021D47;
 }
 
 table tbody tr:hover {

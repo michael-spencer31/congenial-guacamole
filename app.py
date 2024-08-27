@@ -22,5 +22,13 @@ def home():
     print(table)
     return render_template("home.html", value=table)
 
+@app.route("/schedule")
+def schedule():
+    return render_template("schedule.html")
+
+@app.route("/standings")
+def standings():
+    return render_template("standings.html")
+
 if __name__ == '__main__':
     app.run(debug=True)
