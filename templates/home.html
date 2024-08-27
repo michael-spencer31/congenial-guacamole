@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="icon" href="/static/images/baseball.png">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0"/>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/static/css/template.css">
+    <script src="/static/js/script.js"></script>
+    <title>Home</title>
+    
+  </head>
+  <body>
+    {% extends "template.html" %}
+    {% block content %}
+                
+        <div class="container">
+            <div class="panel panel-default">
+                <table>
+                    <th>Team</th>
+                    <th>W</th>
+                    <th>L</th>
+                    <th>OTL</th>
+                    <th>SOL</th>
+                    <th>Points</th>
+                    
+                </table>
+            </div>
+        </div>
+        
+    {% endblock %}
+  </body>
+</html>
