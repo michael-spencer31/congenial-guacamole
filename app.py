@@ -1,8 +1,9 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from flask_cors import CORS, cross_origin
 import requests
 from bs4 import BeautifulSoup
-import pandas as pd
+import re
+#import pandas as pd
 
 headers = {
     "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/117.0"
@@ -13,22 +14,79 @@ app = Flask(__name__)
 #default landing page
 @app.route("/")
 def home():
+    return render_template("home.html")
 
+@app.route('/standings_data')
+def get_data():
     url = 'https://www.atlanticuniversitysport.com/sports/wice/2023-24/standings'
 
-    #pass in headers with the request so we don't get blocked
+    # Make the request
     response = requests.get(url, headers=headers)
-    response.raise_for_status()
+    response.raise_for_status()  # Raise an error for bad responses
 
+    # Parse the HTML
     soup = BeautifulSoup(response.text, 'html.parser')
+
+    # Find the correct table (this assumes you want the first table, adjust if needed)
     table = soup.find('table')
-    print(table)
-    return render_template("home.html", value=table)
+
+    # Check if the table was found
+    if not table:
+        raise ValueError("Table not found")
+
+    # Find all rows in the table
+    rows = table.find_all('tr')
+
+    # Extract data
+    data = []
+    for row in rows:
+        cols = row.find_all('td')
+        if len(cols) > 0:
+            # Extract text for each column
+            row_data = [col.get_text(strip=True) for col in cols]
+            data.append(row_data)
+
+    # Update the data with extracted team names
+    updated_data = []
+    for row in data:
+        if len(row) > 0:
+            team_name = extract_team_name(row)
+            updated_row = [team_name] + row[1:]  # Replace the first column with the extracted team name
+            updated_data.append(updated_row)
+        else:
+            updated_data.append(row)  # Keep the header row unchanged
+    
+    for row in updated_data:
+        print(row)
+
+    return jsonify(updated_data)
+
+#helper function to remove excess data from data
+def extract_team_name(entry):
+    match = re.match(r'([^\d]+)', entry[0])
+    if match:
+        return match.group(1).strip()
+    
+    return "Team name not found"
 
 #main landing page for the schedule
 @app.route("/schedule")
 def schedule():
     return render_template("schedule.html")
+
+@app.route("/schedule_data")
+def get_schedule():
+    url = 'https://www.atlanticuniversitysport.com/sports/wice/2024-25/schedule?confonly=1'
+    
+    response = requests.get(url, headers=headers)
+
+    response.raise_for_status()
+
+    soup = BeautifulSoup(response.text, 'html.parser')
+    table = soup.find('table')
+    rows = []
+
+    return ""
 
 #main landing page for the standings
 @app.route("/standings")
