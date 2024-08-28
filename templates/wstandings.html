@@ -8,7 +8,10 @@
     <link rel="stylesheet" href="/static/css/template.css">
     <script src="/static/js/script.js"></script>
     <title>Standings</title>
-    
+    <script>
+        // Fetch data when the page loads
+        window.onload = fetchData('f');
+    </script>
   </head>
   <body>
     {% extends "template.html" %}
@@ -16,10 +19,14 @@
                 
         <div class="container">
             <div class="panel panel-default">
-                
+                <table id="data-table"></table>
             </div>
         </div>
+
+        
         
     {% endblock %}
+
+    
   </body>
 </html>

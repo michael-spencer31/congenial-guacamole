@@ -7,8 +7,11 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <link rel="stylesheet" href="/static/css/template.css">
     <script src="/static/js/script.js"></script>
-    <title>Home</title>
-    
+    <title>Standings</title>
+    <script>
+        // Fetch data when the page loads
+        window.onload = fetchData('m');
+    </script>
   </head>
   <body>
     {% extends "template.html" %}

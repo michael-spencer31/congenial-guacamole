@@ -86,3 +86,22 @@ table tbody tr:hover {
     display: flex;
     align-items: center;
 }
+
+.navbar .dropdown-menu {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+}
+
+.navbar .dropdown-menu > li > a {
+    padding: 10px 15px;
+    color: black !important;
+}
+
+.navbar .dropdown-menu > li > a:hover {
+    background-color: #ddd;
+    color: black !important;
+}
+
+.dropdown-toggle:active, .dropdown-toggle {
+    background: #fff !important;
+}

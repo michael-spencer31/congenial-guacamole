@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS, cross_origin
 import requests
 from bs4 import BeautifulSoup
@@ -16,9 +16,15 @@ app = Flask(__name__)
 def home():
     return render_template("home.html")
 
-@app.route('/standings_data')
+@app.route('/standings_data', methods=['GET'])
 def get_data():
-    url = 'https://www.atlanticuniversitysport.com/sports/wice/2023-24/standings'
+    option = request.args.get('option')
+    url = 'https://www.atlanticuniversitysport.com/sports/'  
+  
+    if option == 'f':
+        url = url + 'wice/2023-24/standings'
+    else:
+        url = url + 'mice/2023-24/standings'
 
     # Make the request
     response = requests.get(url, headers=headers)
@@ -56,8 +62,7 @@ def get_data():
         else:
             updated_data.append(row)  # Keep the header row unchanged
     
-    for row in updated_data:
-        print(row)
+    
 
     return jsonify(updated_data)
 
@@ -83,15 +88,23 @@ def get_schedule():
     response.raise_for_status()
 
     soup = BeautifulSoup(response.text, 'html.parser')
+    
     table = soup.find('table')
-    rows = []
+    rows = table.find_all('tr')
+    header_data = rows[0]
+    data = []
+
 
     return ""
 
 #main landing page for the standings
-@app.route("/standings")
-def standings():
-    return render_template("standings.html")
+@app.route("/wstandings")
+def wstandings():
+    return render_template("wstandings.html")
+
+@app.route("/mstandings")
+def mstandings():
+    return render_template("mstandings.html")
 
 #this *may* need to be removed when moving to 
 #production, depending on the production server
