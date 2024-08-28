@@ -75,9 +75,9 @@ def extract_team_name(entry):
     return "Team name not found"
 
 #main landing page for the schedule
-@app.route("/schedule")
-def schedule():
-    return render_template("schedule.html")
+@app.route("/wschedule")
+def wschedule():
+    return render_template("wschedule.html")
 
 @app.route("/schedule_data")
 def get_schedule():

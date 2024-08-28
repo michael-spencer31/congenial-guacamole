@@ -29,6 +29,11 @@
     color: black !important;
 }
 
+/* this ensures tables don't overflow on smaller screens */
+*:has(> table) {
+    overflow-y: scroll;
+}
+
 .btn-primary {
     background-color: #021D47 !important;
 }
