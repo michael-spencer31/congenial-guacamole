@@ -2,7 +2,7 @@ from flask import Flask, render_template
 from flask_cors import CORS, cross_origin
 import requests
 from bs4 import BeautifulSoup
-#import pandas as pd
+import pandas as pd
 
 headers = {
     "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/117.0"
