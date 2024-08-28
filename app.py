@@ -90,12 +90,19 @@ def get_schedule():
     soup = BeautifulSoup(response.text, 'html.parser')
     
     table = soup.find('table')
+    if not table:
+        raise ValueError("Table not found")
+    
     rows = table.find_all('tr')
-    header_data = rows[0]
     data = []
 
-
-    return ""
+    for row in rows:
+        cols = row.find_all('td')
+        if len(cols) > 0:
+            row_data = [col.get_text(strip=True) for col in cols]
+            data.append(row_data)
+    print(data)
+    return jsonify(data)
 
 #main landing page for the standings
 @app.route("/wstandings")
