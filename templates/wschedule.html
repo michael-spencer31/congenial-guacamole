@@ -9,23 +9,7 @@
     <script src="/static/js/script.js"></script>
     <title>Schedule</title>
     <script>
-        async function fetch_schedule () {
-            try {
-                const response = await fetch('/schedule_data');
-                // Check if the response is OK (status code 200)
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                
-                // Parse JSON data
-                const dataString = await response.json();
-                
-
-            } catch (error) {
-                console.error('There was a problem with the fetch operation', error);
-            }
-        }
-        window.onload = fetch_schedule;
+        window.onload = fetch_schedule('f');
     </script>
   </head>
   <body>
@@ -34,7 +18,7 @@
                 
         <div class="container">
             <div class="panel panel-default">
-
+                <table id="data-table"></table>
             </div>
         </div>
         

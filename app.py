@@ -79,10 +79,22 @@ def extract_team_name(entry):
 def wschedule():
     return render_template("wschedule.html")
 
-@app.route("/schedule_data")
+@app.route("/mschedule")
+def mschedule():
+    return render_template("mschedule.html")
+
+@app.route('/schedule_data', methods=['GET'])
 def get_schedule():
-    url = 'https://www.atlanticuniversitysport.com/sports/wice/2024-25/schedule?confonly=1'
+
+    option = request.args.get('option')
+
+    url = 'https://www.atlanticuniversitysport.com/sports/'  
     
+    if option == 'f':
+        url = url + 'wice/2024-25/schedule?confonly=1'
+    else:
+        url = url + 'mice/2024-25/schedule?confonly=1'
+        
     response = requests.get(url, headers=headers)
 
     response.raise_for_status()
@@ -101,7 +113,6 @@ def get_schedule():
         if len(cols) > 0:
             row_data = [col.get_text(strip=True) for col in cols]
             data.append(row_data)
-    print(data)
     return jsonify(data)
 
 #main landing page for the standings

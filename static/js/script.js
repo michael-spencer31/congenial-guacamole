@@ -53,3 +53,39 @@ async function fetchData(gender) {
         console.error('There was a problem with the fetch operation:', error);
     }
 }
+
+async function fetch_schedule (gender) {
+    try {
+        const url = `/schedule_data?option=${encodeURIComponent(gender)}`;
+        const response = await fetch(url);
+        // Check if the response is OK (status code 200)
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const headers = ['Date', 'Away'];
+        // Parse JSON data
+        const dataString = await response.json();
+        const table = document.getElementById('data-table');
+
+        let thead = '<tr>';
+        headers.forEach(header => thead += `<th>${header}</th>`);
+        thead += '</tr>';
+
+        let tbody = '<tbody>';
+        dataString.forEach(row => {
+            tbody += '<tr>';
+                for (let i = 0; i < 7; i++) {
+
+                    if (row[i] === undefined) {
+                        tbody += `<td>${' '}</td>`;
+                    } else {
+                        tbody += `<td>${row[i]}</td>`;
+                    }
+                }
+        });
+        tbody += '</tbody>';
+        table.innerHTML = thead + tbody;
+    } catch (error) {
+        console.error('There was a problem with the fetch operation', error);
+    }
+}
