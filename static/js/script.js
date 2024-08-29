@@ -53,7 +53,7 @@ async function fetchData(gender) {
         console.error('There was a problem with the fetch operation:', error);
     }
 }
-
+// function to get schedule
 async function fetch_schedule (gender) {
     try {
         const url = `/schedule_data?option=${encodeURIComponent(gender)}`;
