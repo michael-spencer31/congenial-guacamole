@@ -7,11 +7,8 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <link rel="stylesheet" href="/static/css/template.css">
     <script src="/static/js/script.js"></script>
-    <title>Standings</title>
-    <script>
-        // Fetch data when the page loads
-        window.onload = fetchData('f');
-    </script>
+    <title>Women's Leaders</title>
+    
   </head>
   <body>
     {% extends "template.html" %}
@@ -19,15 +16,16 @@
                 
         <div class="container">
             <div class="panel panel-default">
-                <h3>2024 - 2025 AUS Women's Hockey Standings</h3>
-                <table id="data-table"></table>
+                <h3>2024 - 2025 AUS Women's Hockey - Indivdual Statistics</h3><br>
+                <ul class="button-list">
+                    <li><button id="wall">All Skaters</button></li>
+                    <li><button id="wforward">Forwards</button></li>
+                    <li><button id="wdefense">Defense</button></li>
+                    <li><button id="wgoalies">Goalies</button></li>
+                </ul>
             </div>
         </div>
-
-        
         
     {% endblock %}
-
-    
   </body>
 </html>

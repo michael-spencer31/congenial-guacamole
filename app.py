@@ -94,7 +94,7 @@ def get_schedule():
         url = url + 'wice/2024-25/schedule?confonly=1'
     else:
         url = url + 'mice/2024-25/schedule?confonly=1'
-        
+
     response = requests.get(url, headers=headers)
 
     response.raise_for_status()
@@ -123,6 +123,10 @@ def wstandings():
 @app.route("/mstandings")
 def mstandings():
     return render_template("mstandings.html")
+
+@app.route("/wleaders")
+def wleaders():
+    return render_template("wleaders.html")
 
 #this *may* need to be removed when moving to 
 #production, depending on the production server

@@ -89,3 +89,10 @@ async function fetch_schedule (gender) {
         console.error('There was a problem with the fetch operation', error);
     }
 }
+
+function compare (a, b) {
+    if (!isNaN(a) && !isNaN(b)) {
+        return Number(a) - Number(b);
+    }
+    return a.localeCompare(b);
+}
