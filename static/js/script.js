@@ -62,7 +62,7 @@ async function fetch_schedule (gender) {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        const headers = ['Date', 'Away'];
+        const headers = ['Date', 'Away', '', 'Home', '', 'Time', 'Stream'];
         // Parse JSON data
         const dataString = await response.json();
         const table = document.getElementById('data-table');
