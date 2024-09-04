@@ -16,6 +16,31 @@ app = Flask(__name__)
 def home():
     return render_template("home.html")
 
+@app.route('/leaders_data', methods=['GET'])
+def get_leaders():
+    url = 'https://www.atlanticuniversitysport.com/sports/wice/2023-24/players?sort=&view=&pos=skaters&r=0'
+
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    table = soup.find('table')
+
+    if not table:
+        raise ValueError("Table not found")
+
+    rows = table.find_all('tr')
+    data = []
+
+    for row in rows:
+        cols = row.find_all('td')
+        if len(cols) > 0:
+            row_data = [col.get_text(strip=True) for col in cols]
+            data.append(row_data)
+   
+
+    return jsonify(data)
+
 @app.route('/standings_data', methods=['GET'])
 def get_data():
     option = request.args.get('option')
@@ -125,7 +150,7 @@ def mstandings():
     return render_template("mstandings.html")
 
 @app.route("/wleaders")
-def wleaders():
+def wleaders():     
     return render_template("wleaders.html")
 
 #this *may* need to be removed when moving to 

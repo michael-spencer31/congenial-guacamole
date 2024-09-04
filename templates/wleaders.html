@@ -8,7 +8,9 @@
     <link rel="stylesheet" href="/static/css/template.css">
     <script src="/static/js/script.js"></script>
     <title>Women's Leaders</title>
-    
+    <script>
+        window.onload = get_leaders();
+	</script>
   </head>
   <body>
     {% extends "template.html" %}
@@ -17,14 +19,32 @@
         <div class="container">
             <div class="panel panel-default">
                 <h3>2024 - 2025 AUS Women's Hockey - Indivdual Statistics</h3><br>
-                <ul class="button-list">
+				<h4>*Note this may take a few seconds to load.</h4><br>
+                <ul id="button-list" class="button-list">
                     <li><button id="wall">All Skaters</button></li>
                     <li><button id="wforward">Forwards</button></li>
                     <li><button id="wdefense">Defense</button></li>
                     <li><button id="wgoalies">Goalies</button></li>
                 </ul>
+                <table id="myTable">
+					<th></th>
+					<tbody></tbody>
+				</table>
             </div>
         </div>
+        <script>
+
+			const list = document.getElementById('button-list');
+			
+			function handleClick (event) {
+				if (event.target.tagName === 'BUTTON') {
+				alert(`List item clicked: ${event.target.id}`);
+				}
+			}
+			list.addEventListener('click', handleClick);
+
+			
+        </script>
         
     {% endblock %}
   </body>

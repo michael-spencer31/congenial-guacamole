@@ -53,9 +53,42 @@ async function fetchData(gender) {
         console.error('There was a problem with the fetch operation:', error);
     }
 }
+
+async function get_leaders () {
+
+    try {
+        const url = `/leaders_data`;
+		const response = await fetch(url);
+        const table = document.getElementById('myTable');
+
+        let tbody = '<tbody>';
+        const headers = ['Rank', 'Player', 'Team', 'GP', 'Goals', 'Assists', 'Points', '+/-'];
+        let thead = '<tr>';
+        headers.forEach(header => thead += `<th>${header}</th>`);
+        thead += '</tr>';
+        const dataString = await response.json();
+
+		dataString.forEach(row => {
+            tbody += '<tr>';
+                for (let i = 0; i < headers.length; i++) {
+
+                    if (row[i] === undefined) {
+                        tbody += `<td>${' '}</td>`;
+                    } else {
+                        tbody += `<td>${row[i]}</td>`;
+                    }
+                }
+        });
+        tbody += '</tbody>';
+        table.innerHTML = thead + tbody;
+    } catch (error) {
+        console.error('Error fetching data', error);
+    }
+}
 // function to get schedule
 async function fetch_schedule (gender) {
     try {
+        
         const url = `/schedule_data?option=${encodeURIComponent(gender)}`;
         const response = await fetch(url);
         // Check if the response is OK (status code 200)
@@ -96,3 +129,69 @@ function compare (a, b) {
     }
     return a.localeCompare(b);
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const table = document.getElementById('myTable');
+    const headers = table.querySelectorAll('th');
+    const tbody = table.querySelector('tbody');
+
+    let currentSortColumn = null;
+    let sortDirection = 'asc'; // Default sorting direction
+
+    headers.forEach(header => {
+        header.addEventListener('click', () => {
+            const column = header.dataset.column;
+
+            // Determine sort direction
+            if (currentSortColumn === column) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortDirection = 'asc'; // Default to ascending for new column
+            }
+
+            // Update sort column
+            currentSortColumn = column;
+
+            // Sort rows
+            sortTable(column, sortDirection);
+        });
+    });
+
+    function sortTable(column, direction) {
+        const rowsArray = Array.from(tbody.querySelectorAll('tr'));
+
+        rowsArray.sort((rowA, rowB) => {
+            const cellA = rowA.querySelector(`td:nth-child(${getColumnIndex(column)})`).textContent.trim();
+            const cellB = rowB.querySelector(`td:nth-child(${getColumnIndex(column)})`).textContent.trim();
+
+            if (direction === 'asc') {
+                return cellA.localeCompare(cellB, undefined, { numeric: true });
+            } else {
+                return cellB.localeCompare(cellA, undefined, { numeric: true });
+            }
+        });
+
+        // Remove existing rows
+        tbody.innerHTML = '';
+
+        // Append sorted rows
+        rowsArray.forEach(row => tbody.appendChild(row));
+
+        // Update header styles
+        updateHeaderStyles();
+    }
+
+    function getColumnIndex(column) {
+        const header = Array.from(headers).find(header => header.dataset.column === column);
+        return Array.from(headers).indexOf(header) + 1;
+    }
+
+    function updateHeaderStyles() {
+        headers.forEach(header => {
+            header.classList.remove('sorted-asc', 'sorted-desc');
+            if (header.dataset.column === currentSortColumn) {
+                header.classList.add(sortDirection === 'asc' ? 'sorted-asc' : 'sorted-desc');
+            }
+        });
+    }
+});
