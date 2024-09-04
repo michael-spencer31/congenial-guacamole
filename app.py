@@ -41,6 +41,30 @@ def get_leaders():
 
     return jsonify(data)
 
+@app.route('/goalies_data', methods=['GET'])
+def get_goalies():
+    url = "https://www.atlanticuniversitysport.com/sports/wice/2023-24/players?sort=&view=&pos=goalie&r=0"
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    table = soup.find('table')
+
+    if not table:
+        raise ValueError("Table not found")
+
+    rows = table.find_all('tr')
+    data = []
+
+    for row in rows:
+        cols = row.find_all('td')
+        if len(cols) > 0:
+            row_data = [col.get_text(strip=True) for col in cols]
+            data.append(row_data)
+   
+
+    return jsonify(data)
+
 @app.route('/standings_data', methods=['GET'])
 def get_data():
     option = request.args.get('option')

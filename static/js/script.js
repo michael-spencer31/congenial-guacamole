@@ -64,7 +64,9 @@ async function get_leaders () {
         let tbody = '<tbody>';
         const headers = ['Rank', 'Player', 'Team', 'GP', 'Goals', 'Assists', 'Points', '+/-'];
         let thead = '<tr>';
-        headers.forEach(header => thead += `<th>${header}</th>`);
+        headers.forEach((header, index) => {
+            thead += `<th data-column="${index}" data-sort-direction="asc">${header}</th>`;
+        });       
         thead += '</tr>';
         const dataString = await response.json();
 
@@ -72,15 +74,14 @@ async function get_leaders () {
             tbody += '<tr>';
                 for (let i = 0; i < headers.length; i++) {
 
-                    if (row[i] === undefined) {
-                        tbody += `<td>${' '}</td>`;
-                    } else {
-                        tbody += `<td>${row[i]}</td>`;
-                    }
+                    tbody += `<td>${row[i] === undefined ? ' ' : row[i]}</td>`;
                 }
+                tbody += '</tr>';
         });
         tbody += '</tbody>';
         table.innerHTML = thead + tbody;
+
+        addSortingFunctionality();
     } catch (error) {
         console.error('Error fetching data', error);
     }
@@ -130,39 +131,31 @@ function compare (a, b) {
     return a.localeCompare(b);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function addSortingFunctionality() {
     const table = document.getElementById('myTable');
     const headers = table.querySelectorAll('th');
     const tbody = table.querySelector('tbody');
 
-    let currentSortColumn = null;
-    let sortDirection = 'asc'; // Default sorting direction
-
     headers.forEach(header => {
         header.addEventListener('click', () => {
-            const column = header.dataset.column;
+            const columnIndex = header.dataset.column;
+            const sortDirection = header.dataset.sortDirection;
 
-            // Determine sort direction
-            if (currentSortColumn === column) {
-                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-            } else {
-                sortDirection = 'asc'; // Default to ascending for new column
-            }
+            // Determine new sort direction
+            const newSortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            header.dataset.sortDirection = newSortDirection;
 
-            // Update sort column
-            currentSortColumn = column;
-
-            // Sort rows
-            sortTable(column, sortDirection);
+            // Sort the table
+            sortTable(columnIndex, newSortDirection);
         });
     });
 
-    function sortTable(column, direction) {
+    function sortTable(columnIndex, direction) {
         const rowsArray = Array.from(tbody.querySelectorAll('tr'));
 
         rowsArray.sort((rowA, rowB) => {
-            const cellA = rowA.querySelector(`td:nth-child(${getColumnIndex(column)})`).textContent.trim();
-            const cellB = rowB.querySelector(`td:nth-child(${getColumnIndex(column)})`).textContent.trim();
+            const cellA = rowA.querySelector(`td:nth-child(${parseInt(columnIndex) + 1})`).textContent.trim();
+            const cellB = rowB.querySelector(`td:nth-child(${parseInt(columnIndex) + 1})`).textContent.trim();
 
             if (direction === 'asc') {
                 return cellA.localeCompare(cellB, undefined, { numeric: true });
@@ -176,22 +169,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Append sorted rows
         rowsArray.forEach(row => tbody.appendChild(row));
-
-        // Update header styles
-        updateHeaderStyles();
     }
-
-    function getColumnIndex(column) {
-        const header = Array.from(headers).find(header => header.dataset.column === column);
-        return Array.from(headers).indexOf(header) + 1;
-    }
-
-    function updateHeaderStyles() {
-        headers.forEach(header => {
-            header.classList.remove('sorted-asc', 'sorted-desc');
-            if (header.dataset.column === currentSortColumn) {
-                header.classList.add(sortDirection === 'asc' ? 'sorted-asc' : 'sorted-desc');
-            }
-        });
-    }
-});
+}

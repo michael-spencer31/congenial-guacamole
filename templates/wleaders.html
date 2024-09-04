@@ -9,7 +9,7 @@
     <script src="/static/js/script.js"></script>
     <title>Women's Leaders</title>
     <script>
-        window.onload = get_leaders();
+        //window.onload = get_leaders();
 	</script>
   </head>
   <body>
@@ -18,33 +18,143 @@
                 
         <div class="container">
             <div class="panel panel-default">
-                <h3>2024 - 2025 AUS Women's Hockey - Indivdual Statistics</h3><br>
+                <h3>2024 - 2025 AUS Women's Hockey - Individual Statistics</h3><br>
 				<h4>*Note this may take a few seconds to load.</h4><br>
                 <ul id="button-list" class="button-list">
-                    <li><button id="wall">All Skaters</button></li>
-                    <li><button id="wforward">Forwards</button></li>
-                    <li><button id="wdefense">Defense</button></li>
+                    <li><button id="skaters">Skaters</button></li>
                     <li><button id="wgoalies">Goalies</button></li>
                 </ul>
+				<label class="switch" id="toggle">
+					<input type="checkbox">
+					<span class="slider round"></span>
+				</label>
+				<p id="type">Skaters</p>
                 <table id="myTable">
-					<th></th>
-					<tbody></tbody>
-				</table>
+                    <thead>
+                        <tr>
+                            <th data-column="0" data-sort-direction="asc">Rank</th>
+                            <th data-column="1" data-sort-direction="asc">Player</th>
+                            <th data-column="2" data-sort-direction="asc">Team</th>
+                            <th data-column="3" data-sort-direction="asc">GP</th>
+                            <th data-column="4" data-sort-direction="asc">Goals</th>
+                            <th data-column="5" data-sort-direction="asc">Assists</th>
+                            <th data-column="6" data-sort-direction="asc">Points</th>
+                            <th data-column="7" data-sort-direction="asc">+/-</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data rows will be injected here -->
+                    </tbody>
+                </table>
             </div>
         </div>
-        <script>
-
-			const list = document.getElementById('button-list');
-			
-			function handleClick (event) {
-				if (event.target.tagName === 'BUTTON') {
-				alert(`List item clicked: ${event.target.id}`);
+		<script>
+			async function fetchDataAndInitializeTable() {
+				try {
+					const url = `/leaders_data`;
+					const response = await fetch(url);
+					const table = document.getElementById('myTable');
+					const tbody = table.querySelector('tbody');
+	
+					let rowsHTML = '';
+					const dataString = await response.json();
+	
+					dataString.forEach(row => {
+						rowsHTML += '<tr>';
+						for (let i = 0; i < 8; i++) {  // Adjust based on the number of columns
+							rowsHTML += `<td>${row[i] === undefined ? ' ' : row[i]}</td>`;
+						}
+						rowsHTML += '</tr>';
+					});
+					tbody.innerHTML = rowsHTML;
+	
+					// Add sorting functionality
+					addSortingFunctionality();
+				} catch (error) {
+					console.error('Error fetching data', error);
 				}
 			}
-			list.addEventListener('click', handleClick);
+	
+			function addSortingFunctionality() {
+				const table = document.getElementById('myTable');
+				const headers = table.querySelectorAll('th');
+				const tbody = table.querySelector('tbody');
+	
+				headers.forEach(header => {
+					header.addEventListener('click', () => {
+						const columnIndex = header.dataset.column;
+						const currentSortDirection = header.dataset.sortDirection;
+						const newSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+	
+						// Update sort direction
+						header.dataset.sortDirection = newSortDirection;
+	
+						// Sort the table
+						sortTable(columnIndex, newSortDirection);
+					});
+				});
+	
+				function sortTable(columnIndex, direction) {
+					const rowsArray = Array.from(tbody.querySelectorAll('tr'));
+	
+					rowsArray.sort((rowA, rowB) => {
+						const cellA = rowA.children[columnIndex].textContent.trim();
+						const cellB = rowB.children[columnIndex].textContent.trim();
+	
+						// Determine if values are numeric or text
+						const isNumeric = !isNaN(cellA) && !isNaN(cellB) && cellA !== '' && cellB !== '';
+	
+						if (isNumeric) {
+							return direction === 'asc'
+								? parseFloat(cellA) - parseFloat(cellB)
+								: parseFloat(cellB) - parseFloat(cellA);
+						} else {
+							return direction === 'asc'
+								? cellA.localeCompare(cellB)
+								: cellB.localeCompare(cellA);
+						}
+					});
+	
+					// Remove existing rows and append sorted rows
+					tbody.innerHTML = '';
+					rowsArray.forEach(row => tbody.appendChild(row));
+	
+					// Update header styles
+					updateHeaderStyles(columnIndex, direction);
+				}
+	
+				function updateHeaderStyles(sortedColumnIndex, sortDirection) {
+					headers.forEach(header => {
+						header.classList.remove('sorted-asc', 'sorted-desc');
+						if (header.dataset.column === sortedColumnIndex) {
+							header.classList.add(sortDirection === 'asc' ? 'sorted-asc' : 'sorted-desc');
+						}
+					});
+				}
+			}
+	
+			// Initialize table when the page is loaded
+			document.addEventListener('DOMContentLoaded', fetchDataAndInitializeTable);
 
-			
-        </script>
+			// Wait until the DOM is fully loaded
+			document.addEventListener('DOMContentLoaded', () => {
+				// Select the switch element
+				const toggleSwitch = document.getElementById('toggle');
+
+				// Function to handle the switch change
+				function handleToggleChange(event) {
+					if (event.target.checked) {
+						document.getElementById("type").innerHTML = "Goalies";
+					} else {
+						document.getElementById("type").innerHTML = "Skaters";
+
+					}
+				}
+
+				// Add the event listener to the switch
+				toggleSwitch.addEventListener('change', handleToggleChange);
+			})
+		</script>
         
     {% endblock %}
   </body>
