@@ -177,6 +177,10 @@ def mstandings():
 def wleaders():     
     return render_template("wleaders.html")
 
+@app.route("/wleadersg")
+def wleadersg():
+    return render_template("wleadersg.html")
+
 #this *may* need to be removed when moving to 
 #production, depending on the production server
 if __name__ == '__main__':

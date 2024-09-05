@@ -16,13 +16,13 @@
         <div class="container">
             <div class="panel panel-default">
                 <h3>2024 - 2025 AUS Women's Hockey - Individual Statistics</h3><br>
-				<h4>Click the toggle below to switch bewtween Goalies/Skaters</h4>
+                <h4>Click the toggle below to switch between skaters/goalies</h4>
 				<h5>*Note this may take a few seconds to load.</h5>
 				<label class="switch" id="toggle">
 					<input type="checkbox">
 					<span class="slider round"></span>
 				</label>
-				<p id="type">Skaters</p>
+				<p id="type">Goalies</p>
                 <table id="myTable">
                     <thead>
                         <tr>
@@ -30,10 +30,12 @@
                             <th data-column="1" data-sort-direction="asc">Player</th>
                             <th data-column="2" data-sort-direction="asc">Team</th>
                             <th data-column="3" data-sort-direction="asc">GP</th>
-                            <th data-column="4" data-sort-direction="asc">Goals</th>
-                            <th data-column="5" data-sort-direction="asc">Assists</th>
-                            <th data-column="6" data-sort-direction="asc">Points</th>
-                            <th data-column="7" data-sort-direction="asc">+/-</th>
+                            <th data-column="4" data-sort-direction="asc">GS</th>
+                            <th data-column="5" data-sort-direction="asc">MIN</th>
+                            <th data-column="6" data-sort-direction="asc">GA</th>
+                            <th data-column="7" data-sort-direction="asc">GAA</th>
+                            <th data-column="8" data-sort-direction="asc">SV</th>
+                            <th data-column="9" data-sort-direction="asc">SV%</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,7 +47,7 @@
 		<script>
 			async function fetchDataAndInitializeTable() {
 				try {
-					const url = `/leaders_data`;
+					const url = `/goalies_data`;
 					const response = await fetch(url);
 					const table = document.getElementById('myTable');
 					const tbody = table.querySelector('tbody');
@@ -55,7 +57,7 @@
 	
 					dataString.forEach(row => {
 						rowsHTML += '<tr>';
-						for (let i = 0; i < 8; i++) {  // Adjust based on the number of columns
+						for (let i = 0; i < 10; i++) {  // Adjust based on the number of columns
 							rowsHTML += `<td>${row[i] === undefined ? ' ' : row[i]}</td>`;
 						}
 						rowsHTML += '</tr>';
@@ -138,7 +140,7 @@
 				// Function to handle the switch change
 				function handleToggleChange(event) {
 					if (event.target.checked) {
-						window.location.href = "{{ url_for('wleadersg') }}";
+                        window.location.href = "{{ url_for('wleaders') }}";
 						document.getElementById("type").innerHTML = "Goalies";
 					} else {
 						document.getElementById("type").innerHTML = "Skaters";
