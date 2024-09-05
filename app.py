@@ -181,6 +181,10 @@ def wleaders():
 def wleadersg():
     return render_template("wleadersg.html")
 
+@app.route("/wresults")
+def wresults():
+    return render_template("wresults.html")
+
 #this *may* need to be removed when moving to 
 #production, depending on the production server
 if __name__ == '__main__':

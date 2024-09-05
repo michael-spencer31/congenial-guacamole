@@ -30,12 +30,18 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Standings <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ url_for('wstandings') }}">Women's Schedule</a></li>
+                                <li><a href="{{ url_for('wstandings') }}">Women's Standings</a></li>
                                 <li><a href="{{ url_for('mstandings') }}">Men's Standings</a></li>
                             </ul>
                         </li>
-                        <li><a href="{{ url_for('wschedule') }}">Women's Schedule</a></li>
-                        <li><a href="{{ url_for('mschedule') }}">Men's Schedule</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Schedule <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ url_for('wschedule') }}">Women's Schedule</a></li>
+                                <li><a href="{{ url_for('mschedule') }}">Men's Schedule</a></li>
+                            </ul>
+                        </li>
+                        
                         <li><a href="{{ url_for('wleaders') }}">Women's Leaders</a></li>
 
 
